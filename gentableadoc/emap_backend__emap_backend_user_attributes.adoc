@@ -1,0 +1,25 @@
+:table-stripes: even
+= emap_backend_user séma
+
+image::emap_backend__emap_backend_user.png[emap_backend_user séma kapcsolati diagram, link="./_images/emap_backend__emap_backend_user.png",window="_blank"]
+
+
+== user_session
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Generált egyedi azonosító.
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | Az utolsó módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| tax_identification_number | VARCHAR(15) |   | nem | A társszervezeti felhasználó adóazonosító jele.
+| kau_transaction_id | VARCHAR(30) |   | nem | A KAÜ tranzakció egyedi azonosítója az EMAP Gateway adatbázisban.
+| session_start | TIMESTAMP |   | nem | A session indulásának időpontja.
+| session_end | TIMESTAMP |   | igen | A session lejáratának időpontja.
+| session_token | VARCHAR(50) |   | nem | A session token értéke.
+| session_token_expiry | TIMESTAMP |   | nem | A session token lejárati ideje.
+| refresh_token | VARCHAR(50) |   | nem | A refresh token értéke.
+| refresh_token_expiry | TIMESTAMP |   | nem | A refresh token lejárati ideje.
+|===
+

@@ -1,0 +1,24 @@
+= gentableadoc
+
+== Leírás
+
+[source,python]
+----
+A program előállítja tables_attributes.adoc fájlt az adatbázisból
+----
+
+== Használat
+
+A `main.py` fájl futtatásával generálhatjuk a `tables_attributes.adoc` fájlt az adatbázis alapján. Az alábbi parancsot használhatjuk:
+
+[source,bash]
+----
+python main.py --database_name <adatbázis_név> --port <port_szám> --output_file <kimeneti_fájl>
+----
+
+Példa:
+
+[source,bash]
+----
+python main.py --database_name paibox_db --port 5432 --output_file tables_attributes.adoc
+----

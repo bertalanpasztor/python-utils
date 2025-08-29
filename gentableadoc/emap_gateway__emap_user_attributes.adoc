@@ -1,0 +1,186 @@
+:table-stripes: even
+= emap_user séma
+
+image::emap_gateway__emap_user.png[emap_user séma kapcsolati diagram, link="./_images/emap_gateway__emap_user.png",window="_blank"]
+
+
+== customer
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | A gazdálkodó egyedi azonosítója. (Generált)
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | A módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| tax_number | VARCHAR(8) |   | nem | A gazdálkodó adószáma.
+| tax_identification_number | VARCHAR(15) |   | igen | Magánszemély adóazonosító jele. Egyéni vállalkozás esetén releváns.
+| vat_class | VARCHAR(1) |   | nem | Áfakör (0 - önkormányzati adókötelezett, 1 - alanyi adómentes, 2 - általános ÁFA alany, 3 - EVA adóalany, 4, 5 - csoportos adóalany, 9 - technikai ÁFA kód)
+| county_code | VARCHAR(2) |   | nem | Megyekód
+| customer_type | VARCHAR(10) |   | nem | A gazdálkodó típusa. ORG - gazdasági trásaság, ENT - egyéni vállalkozás
+| name | VARCHAR(200) |   | nem | A gazdálkodó neve.
+| status | VARCHAR(10) | 'ACTIVE'::character varying | nem | A record státusza. (ACTIVE, INACTIVE)
+|===
+
+== customer_security_user_relation
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Generált egyedi azonosító.
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | A módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| security_user_id | VARCHAR(30) |   | nem | A technikai felhasználó egyedi azonosítója. (SECURITY_USER.X__ID)
+| customer_id | VARCHAR(30) |   | nem | A gazdálkodó egyedi azonosítója. (CUSTOMER.X__ID)
+| status | VARCHAR(10) | 'ACTIVE'::character varying | nem | A record státusza. (ACTIVE, INACTIVE)
+|===
+
+== customer_user
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | A user egyedi azonosítója. (Generált)
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | A módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| tax_identification_number | VARCHAR(15) |   | nem | Magánszemély adóazonosító jele
+| name | VARCHAR(200) |   | nem | A felhasználó neve
+| status | VARCHAR(10) | 'ACTIVE'::character varying | nem | A record státusza. (ACTIVE, INACTIVE)
+|===
+
+== customer_user_relation
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Generált egyedi azonosító.
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | A módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| customer_user_id | VARCHAR(30) |   | nem | A felhasználó egyedi azonosítója. (CUSTOMER_USER.X__ID)
+| customer_id | VARCHAR(30) |   | nem | A gazdálkodó egyedi azonosítója. (CUSTOMER.X__ID)
+| user_type | VARCHAR(30) |   | nem | A felhasználói reláció típusa. (EMPLOYER - munkáltató, PAYROLL_CLERK - bérszámfejtő)
+| status | VARCHAR(10) | 'ACTIVE'::character varying | nem | A record státusza. (ACTIVE, INACTIVE)
+|===
+
+== kau_relay_state
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Elsődleges kulcs. A login relayState azonosítója, ami alapján a validációkor bazonosítjuk a bejelentkezés forrását.
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója
+| x__moddate | TIMESTAMP |   | igen | A módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| source | VARCHAR(10) |   | nem | A login kérés forrása. CUST= EMAP munkáltatói portál, NAV=Nemzeti Adó és Vámhivatal, NEAK=Nemzeti Egészségbiztosítási Alapkezelő, KSH=Központi Statisztikai Hivatal, KINCSTAR= Magyar Államkincstár
+| expiry | TIMESTAMP |   | nem | A validáció eddig meg kell történjen.
+|===
+
+== kau_tax_identification_number
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Generált egyedi azonosító.
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | A módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| kau_transaction_id | VARCHAR(30) |   | nem | A KAÜ tranzakció egyedi azonosítója. (KAU_TRANSACTION.X__ID)
+| tax_identification_number | VARCHAR(15) |   | nem | Magánszemély adóazonosító jele
+|===
+
+== kau_transaction
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Generált egyedi azonosító.
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | A módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| kau_relay_state_id | VARCHAR(30) |   | nem | A KAÜ bejelentkezési folyamat azonosítója. (KAU_RELAY_STATE.X__ID)
+| transaction_status | VARCHAR(30) |   | nem | A KAÜ azonosítás státusza (SUCCESS, FAILED)
+| transaction_error_result | VARCHAR(4000) |   | igen | A KAÜ azonosítás státuszának hibás eredményéhez köthető JSON objektum
+| personal_unique_identifier | VARCHAR(32) |   | igen | A felhasználóra és a lekérdező szakrendszerre együtt egyedi azonosító.
+| authentication_mode | VARCHAR(100) |   | igen | A felhasználó azonosítási módja KAÜ-ben. (ONE_FACTOR_BY_USER_ID_AND_PASS - Egyfaktoros azonosítás userid + jelszóval, TWO_FACTOR_BY_DAP_MOBILE - DÁP mobilalkalmazás, TWO_FACTOR_BY_UKP_EMAIL - Ügyfélkapu + email alapú második faktorral, TWO_FACTOR_BY_TOTP - Ügyfélkapu + TOTP második faktorral)
+| name_id | VARCHAR(4000) |   | igen | A KAÜ által visszaadott felhasználói azonosító adat
+| kau_response_id | VARCHAR(64) |   | igen | KAÜ válasz azonosítója
+| kau_response_to_id | VARCHAR(64) |   | igen | KAÜ válaszának request azonosítója
+|===
+
+== org_user
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Társszervi felhasználó egyedi azonosítója. (Generált)
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | A módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| name | VARCHAR(200) |   | nem | Felhasználó neve.
+| status | VARCHAR(10) | 'ACTIVE'::character varying | nem | A rekord státusza. (ACTIVE, INACTIVE)
+| tax_identification_number | VARCHAR(15) |   | nem | Felhasználó adóazonosító jele.
+|===
+
+== org_user_relation
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Tábla egyedi azonosítója. (Generált)
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | A módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| org_id | VARCHAR(30) |   | nem | Társszervezet egyedi azonosítója. (ORGANIZATION.X__ID)
+| org_user_id | VARCHAR(30) |   | nem | Társszervi felhasználó egyedi azonosítója. (ORG_USER.X__ID)
+| status | VARCHAR(10) | 'ACTIVE'::character varying | nem | A record státusza. (ACTIVE, INACTIVE)
+|===
+
+== organization
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Társszervezet egyedi azonosítója. (Generált)
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | A módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| source_name | VARCHAR(10) |   | nem | Társszervezet rövid kódja, ami alapján a végpontok a source értéket validálják. Lehetséges értékei: NAV, KSH, NEAK, KINCSTAR
+| name | VARCHAR(200) |   | nem | Társszervezet neve.
+|===
+
+== security_user
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Elsődleges kulcs
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója
+| x__moddate | TIMESTAMP |   | igen | A módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| user_name | VARCHAR(100) |   | igen | A felhasználó login neve
+| api_sign_key | VARCHAR(255) |   | igen | A felhasználó request aláíró kulcsának értéke
+| exchange_key | VARCHAR(255) |   | igen | A technikai user token generáló kulcsának értéke
+|===
+
+== user_session
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Generált egyedi azonosító.
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | A módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| user_id | VARCHAR(30) |   | nem | A felhasználó egyedi azonosítója. (CUSTOMER_USER.X__ID)
+| kau_transaction_id | VARCHAR(30) |   | nem | A KAÜ tranzakció egyedi azonosítója. (KAU_TRANSACTION.X__ID)
+| session_start | TIMESTAMP |   | nem | A session indulásának időpontja.
+| session_end | TIMESTAMP |   | igen | A session lejáratának időpontja.
+| session_token | VARCHAR(50) |   | nem | A session token értéke.
+| session_token_expiry | TIMESTAMP |   | nem | A session token lejárati ideje.
+| refresh_token | VARCHAR(50) |   | nem | A refresh token értéke.
+| refresh_token_expiry | TIMESTAMP |   | nem | A refresh token lejárati ideje.
+|===
+

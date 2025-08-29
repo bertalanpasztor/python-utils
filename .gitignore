@@ -126,5 +126,3 @@ cython_debug/
 # PyCharm
 .idea/
 
-# Output file
-*.adoc

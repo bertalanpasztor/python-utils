@@ -1,0 +1,7 @@
+= Projekt Dokumentáció
+
+-- TODO: Antora formátumra hozni
+-- TODO: megcsinálni a gentable_from_document programot
+
+include::gentableadoc/README.adoc[leveloffset=+1]
+

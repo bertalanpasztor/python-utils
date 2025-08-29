@@ -1,0 +1,167 @@
+:table-stripes: even
+= emap_backend séma
+
+image::emap_backend__emap_backend.png[emap_backend séma kapcsolati diagram, link="./_images/emap_backend__emap_backend.png",window="_blank"]
+
+
+== chaincode_invocation
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Egyedi azonosítója. (Generált)
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | Az utolsó módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| event_id | VARCHAR(30) |   | nem | Esemény azonosító (EVENT.X__ID)
+| channel | VARCHAR(255) |   | nem | Azt rögzíti, hogy az adott esemény átadásakor hívott chaincode melyik channel-ön volt deploy-olva.
+| chaincode | VARCHAR(255) |   | nem | Azt rögzíti, hogy az adott esemény átadásához melyik chaincode lett hívva.
+| transaction | VARCHAR(255) |   | nem | Chaincodeon belüli metódust jelöl (pl. a beküldésre “createEventAsset”)
+| tx_request_data | BYTEA |   | nem | Chaincode felé küldött kérés
+| tx_response | BYTEA |   | igen | Chaincode-tól visszakapott válasz
+| status | VARCHAR(10) |   | nem | Chaincode hívás státusza: SUCCESS,ERROR
+|===
+
+== event
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Gateway által generált esemény azonosító. Input adatként érkezik, nem generált id.
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | Az utolsó módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| event_type_id | VARCHAR(20) |   | nem | Esemény üzleti szintű azonosítója
+| event_version | VARCHAR(5) |   | nem | Esemény verziószáma. pl: 1.0
+| related_event_id | VARCHAR(30) |   | igen | Az eredeti, legelső esemény PK-ja, módosító eseményekkor töltendő.
+| customer_id | VARCHAR(30) |   | nem | Az adatszolgáltató egyedi EMAP azonosítója. (gateway-db.CUSTOMER.X__ID)
+| received_date | TIMESTAMP |   | nem | Az esemény beérkezésének pontos időpontja.
+| operation | VARCHAR(20) |   | nem | Esemény művelet: CREATE - esemény létrehozás, MODIFY - meglévő esemény módosítása, DELETE - meglévő esemény törlése
+| status | VARCHAR(30) |   | nem | Esemény státusza:
+- IN_PROGRESS - Az esemény feldolgozás alatt van
+- ERROR - Az esemény érkeztetése után a tartalmi validáció az adott szervezet(ek)nél elhasalt, nem történt meg a láncra mentés
+- SUCCESS - Az esemény befogadása sikeres (tartalmi validáció sikeres és láncra mentés megtörtént)
+- SUCCESS_WITH_WARNING - Az esemény befogadása (tartalmi validáció és láncra mentés) sikeres, de tartalmi validációs figyelmeztetések voltak
+- CHAIN_DISTRIBUTING - Az esemény validálva lett. Láncra mentése és terítése folyamatban.
+| employer_tax_number | VARCHAR(11) |   | igen | Munkáltató adószáma
+| employer_tax_id_number | VARCHAR(10) |   | igen | Munkáltató adóazonosító jel
+| employee_tax_id_number | VARCHAR(10) |   | igen | Munkavállaló adóazonosító jel
+| reference_date | TIMESTAMP |   | igen | Az esemény vonatkozási dátuma (Jogviszony kezdete), ami alapján a verziója és a nyomtatványba rendezése is történik.
+| block_number |   |   | igen | Azt mutatja meg hogy melyik blokkba került az esemény a láncon.
+|===
+
+== event_catalog
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Elsődleges kulcs
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | Az utolsó módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| event_type_id | VARCHAR(30) |   | nem | Esemény üzleti azonosító (pl. ETID-1-1-1-1)
+| event_version | VARCHAR(5) |   | nem | Esemény verziószáma. pl: 1.0
+|===
+
+== event_catalog_item
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Elsődleges kulcs
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | Az utolsó módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| event_catalog_id | VARCHAR(30) |   | nem | Esemény katalógus azonosítója(EVENT_CATALOG.X__ID
+| catalog_type | VARCHAR(20) |   | nem | Katalógus típusa:VALIDATION_DATA
+| catalog | BYTEA |   | nem | A típushoz tartozó katalógus xml formátumban,
+| valid_from | TIMESTAMP |   | nem | Az esemény verzió hatályosságának kezdete.
+| valid_to | TIMESTAMP |   | nem | Az esemény verzió hatályosságának vége.
+|===
+
+== event_data
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Gateway által generált esemény azonosító. Input adatként érkezik, nem generált id.
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | Az utolsó módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| event_id | VARCHAR(30) |   | igen | FK az EVENT táblára.
+| event_data | BYTEA |   | nem | Az esemény adatai BLOB-ban, json struktúrában.
+| event_evsz | VARCHAR(60) |   | nem | Az esemény fej adathoz tartozó EVSZ azonosító
+|===
+
+== event_input
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Egyedi azonosítója. (Generált)
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | Az utolsó módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| event_id | VARCHAR(30) |   | nem | Az esemény egyedi azonosítója, foreign key. (EVENT.X__ID)
+| event_data | BYTEA |   | nem | Az esemény adatai BLOB-ban, xml struktúrában.
+|===
+
+== event_status_process
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Elsődleges kulcs
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | Az utolsó módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| event_id | VARCHAR(30) |   | nem | Esemény azonosító (EVENT.X__ID)
+| timeout | TIMESTAMP |   | nem | A process rekord érvényességének lejárati ideje.
+| status | VARCHAR(10) |   | nem | process rekord státusza: OPEN, DONE
+| operation | VARCHAR(32) |   | nem | Művelet típusa:
+EXTERNAL_SYSTEM_VALIDATION_DATA - Külső szakrendszeri lekérdezés szükséges
+RELATED_EVENT_VALIDATION_DATA - másik releváns esemény lekérdezése szükséges
+CHAINCODE_INVOCATION - Chaincode felé továbbítani szükséges
+PROCESS_FINALIZE - Esemény adatai elmentődtek a gyorsítótárba
+| catalog_source_data | BYTEA |   | igen | Az egyes művelet típusok catalogus leírásai. CHAINCODE_INVOCATION esetén nincs catalog elem
+| external_system_id | VARCHAR(30) |   | igen | Katalógus fájlban meghatározott külső szakrendszer azonosító
+| result | BYTEA |   | igen | A result mező a korábbi esemény adatok tárolására szolgál.
+| ext_session_id | VARCHAR(30) |   | nem | Logbejegyzés beazonosításához használt egyedi azonosító.
+| correlation_id | VARCHAR(30) |   | igen | A validációs szabály és a begyűjtött adat közötti kapcsolatot jelölő azonosító.
+|===
+
+== event_validation_result
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Elsődleges kulcs
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | Az utolsó módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| event_id | VARCHAR(30) |   | nem | Az esemény típus egyedi azonosítója.
+| code | VARCHAR(20) |   | nem | Tartalmai validáció során visszakapott hibakód
+| type | VARCHAR(10) |   | nem | Hiba típusa:ERROR, WARNING
+| message | TEXT |   | nem | Chaincode-től visszakapott hibaüzenet.
+|===
+
+== external_system_invocation
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Egyedi azonosítója. (Generált)
+| event_id | VARCHAR(30) |   | nem | Esemény azonosító (event.X__ID)
+| correlation_id | VARCHAR(30) |   | nem | A chaincode logikának fontos korrelációs azonosító. A validációs szabálynak ezzel az azonosítóval kell hivatkoznia a lekérdezések során összegyűjtött adatokra a teljes egyértelműség érdekében.
+| external_system_code | VARCHAR(50) |   | nem | A külső szakrendszeri hívás kódja, amely alapján eldönthetjük hogy milyen tartalmi validációt kell végrehajtani és amiatt milyen külső rendszert kell meghívni.
+| status | VARCHAR(10) |   | nem | A hívás státusza (SUCCESS,ERROR)
+| request_id | VARCHAR(50) |   | igen | A külső rendszeri hívás egyedi azonosítója.
+| request_header | BYTEA |   | igen | A külső szakrendszer felé küldött header értékek
+| request_data | BYTEA |   | nem | A külső szakrendszer felé küldött kérés
+| response_header | BYTEA |   | igen | A külső szakrendszertől kapott válasz header értékei
+| response_data | BYTEA |   | igen | A külső szakrendszertől visszakapott válasz
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | Az utolsó módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+|===
+

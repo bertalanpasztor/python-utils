@@ -1,0 +1,34 @@
+:table-stripes: even
+= ticker séma
+
+image::akp_be__ticker.png[ticker séma kapcsolati diagram, link="./_images/akp_be__ticker.png",window="_blank"]
+
+
+== task_definition
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Elsődleges kulcs
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | Az utolsó módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| task_description | VARCHAR(1000) |   | nem | Feladat típusa
+| external_id | VARCHAR(30) |   | nem | Feladathoz köthető objektum azonosítója
+| rest_client_class_name | VARCHAR(500) |   | nem | Feladat által meghívandó MP Rest kliens FQ osztályneve
+|===
+
+== task_schedule
+|===
+| Mező | Típus | Alapértelmezett érték | Kötelező? | Leírás
+| x__id | VARCHAR(30) |   | nem | Elsődleges kulcs
+| x__insdate | TIMESTAMP | CURRENT_TIMESTAMP | nem | A beszúrás időpontja
+| x__insuser | VARCHAR(30) | '0'::character varying | nem | A beszúrást végző felhasználó azonosítója (X__ID)
+| x__moddate | TIMESTAMP |   | igen | Az utolsó módosítás időpontja
+| x__moduser | VARCHAR(30) |   | igen | A módosítást végző felhasználó azonosítója (X__ID)
+| x__version | BIGINT | 0 | nem | Változás verziózása
+| task_definition_id | VARCHAR(30) |   | nem | Feladat fejadat FK (TASK_DEFINITION.X__ID)
+| task_process_timestamp | TIMESTAMP |   | nem | Feladat elvégzésének időpontja
+| status | VARCHAR(30) |   | nem | Feladat státusza
+|===
+
