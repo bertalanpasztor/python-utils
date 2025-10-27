@@ -1,8 +1,9 @@
-import datetime
-import os
+from datetime import datetime
 import time
 import random
 import threading
+from time import sleep
+
 
 def random_date(start, end):
     start_timestamp = int(time.mktime(start.timetuple()))
@@ -63,8 +64,22 @@ class IDUtil:
                 generated_index = 0
             return generated_index
 
+def generateid():
+    # Generate random 5-digit integer (to match the original logic)
+    rndint = random.randint(10000, 99999)
+    idstr = datetime.now().strftime('%Y%m%d%H%M%S%f') + str(rndint)
+    szam = int(idstr)
+    szam_konv = ''
+    while szam > 0:
+        szamjegy = szam % 35
+        if 0 <= szamjegy <= 9:
+            szam_konv = chr(48 + szamjegy) + szam_konv
+        elif 10 <= szamjegy <= 34:
+            szam_konv = chr(65 + szamjegy - 10) + szam_konv
+        szam = szam // 35
+    return szam_konv
 
 if __name__ == '__main__':
-    for _ in range(76):
-        print(IDUtil.generate_id())
-    pass
+    for _ in range(10):
+        sleep(0.001)
+        print(generateid())

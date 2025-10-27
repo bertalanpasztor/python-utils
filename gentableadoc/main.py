@@ -11,17 +11,17 @@ from gentableadoc.database_interface import DatabaseInterface
 
 @click.command()
 
-@click.option('--database_name', '-d', help='Database name', default='emap_backend')
-@click.option('--database_schema', '-s', help='Database schema', default='emap_backend')
-@click.option('--port', '-p', help='port number', default=5432)
-@click.option('--postgres_user', '-u', help='postgres user', default='postgres')
-@click.option('--postgres_password', '-w', help='postgres password', default='postgres')
-
-#@click.option('--database_name', '-d', help='Database name', default='emap_gateway')
-#@click.option('--database_schema', '-s', help='Database schema', default='emap_user')
+#@click.option('--database_name', '-d', help='Database name', default='emap_backend')
+#@click.option('--database_schema', '-s', help='Database schema', default='emap_backend')
 #@click.option('--port', '-p', help='port number', default=5432)
 #@click.option('--postgres_user', '-u', help='postgres user', default='postgres')
 #@click.option('--postgres_password', '-w', help='postgres password', default='postgres')
+
+@click.option('--database_name', '-d', help='Database name', default='emap_gateway')
+@click.option('--database_schema', '-s', help='Database schema', default='emap_gateway')
+@click.option('--port', '-p', help='port number', default=5432)
+@click.option('--postgres_user', '-u', help='postgres user', default='postgres')
+@click.option('--postgres_password', '-w', help='postgres password', default='postgres')
 
 def main(database_name, port, postgres_user, postgres_password, database_schema):
     """
