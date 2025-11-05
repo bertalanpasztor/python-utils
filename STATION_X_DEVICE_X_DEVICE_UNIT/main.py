@@ -13,6 +13,6 @@ if __name__ == '__main__':
     )
     table = Table(
         schema_name='public',
-        table_name='teszt1'
+        table_name='teszt'
     )
     read_sheet_to_database_table(sheet_link, database, table)

@@ -31,34 +31,58 @@ class Table:
         tables = [Table(db.conn, *row) for row in rows]
         return tables
 
-    def get_structure(self):
+    def get_structure(self, for_word=False) -> list:
         """
         Visszaadja a tábla struktúráját egy listában.
         :return: a tábla oszlopainak leíró rekordjai
         """
         cur = self.conn.cursor()
-        cur.execute(f"""SELECT
-		column_name,
-    CASE
-        WHEN data_type = 'character varying' THEN 'VARCHAR(' || character_maximum_length || ')'
-        WHEN data_type = 'character' THEN 'CHAR(' || character_maximum_length || ')'
-        WHEN data_type = 'numeric' THEN 'NUMERIC(' || numeric_precision || ', ' || numeric_scale || ')'
-        WHEN data_type = 'timestamp without time zone' THEN 'TIMESTAMP'
-        WHEN data_type = 'timestamp without time zone' THEN 'TIMESTAMP'
-        ELSE UPPER(data_type)
-    END AS column_type,
-    column_default,
-    CASE
-        WHEN is_nullable = 'YES' THEN 'igen'
-        ELSE 'nem'
-    END AS is_nullable,
-    col_description(format('%s.%s', table_schema, table_name)::regclass::oid, ordinal_position) AS comment
-FROM
-    information_schema.columns
-WHERE
-    table_schema = '{self.schema}'
-    AND table_name = '{self.name}'
-""")
+        if for_word == False:
+            cur.execute(f"""SELECT
+            column_name,
+        CASE
+            WHEN data_type = 'character varying' THEN 'VARCHAR(' || character_maximum_length || ')'
+            WHEN data_type = 'character' THEN 'CHAR(' || character_maximum_length || ')'
+            WHEN data_type = 'numeric' THEN 'NUMERIC(' || numeric_precision || ', ' || numeric_scale || ')'
+            WHEN data_type = 'timestamp without time zone' THEN 'TIMESTAMP'
+            WHEN data_type = 'timestamp without time zone' THEN 'TIMESTAMP'
+            ELSE UPPER(data_type)
+        END AS column_type,
+        column_default,
+        CASE
+            WHEN is_nullable = 'YES' THEN 'igen'
+            ELSE 'nem'
+        END AS is_nullable,
+        col_description(format('%s.%s', table_schema, table_name)::regclass::oid, ordinal_position) AS comment
+    FROM
+        information_schema.columns
+    WHERE
+        table_schema = '{self.schema}'
+        AND table_name = '{self.name}'
+    """)
+        else:
+            cur.execute(f"""SELECT
+                    upper(column_name),
+                CASE
+                    WHEN data_type = 'character varying' THEN 'VARCHAR(' || character_maximum_length || ')'
+                    WHEN data_type = 'character' THEN 'CHAR(' || character_maximum_length || ')'
+                    WHEN data_type = 'numeric' THEN 'NUMERIC(' || numeric_precision || ', ' || numeric_scale || ')'
+                    WHEN data_type = 'timestamp without time zone' THEN 'TIMESTAMP'
+                    WHEN data_type = 'timestamp without time zone' THEN 'TIMESTAMP'
+                    ELSE UPPER(data_type)
+                END AS column_type,
+                CASE
+                    WHEN is_nullable = 'YES' THEN 'IGEN'
+                    ELSE 'NEM'
+                END AS is_nullable,
+                column_default,
+                col_description(format('%s.%s', table_schema, table_name)::regclass::oid, ordinal_position) AS comment
+            FROM
+                information_schema.columns
+            WHERE
+                table_schema = '{self.schema}'
+                AND table_name = '{self.name}'
+            """)
         out = cur.fetchall()
         return out
 

@@ -10,20 +10,20 @@ class Structure_generator:
         - children: A list of child sections
     """
 
-    def __init__(self, tablelist):
+    def __init__(self, tablelist, for_word=False):
         """
         Constructor
         :param tablelist: A list of tables
-        :param schema: The schema of the tables
+        :param for_word: Format for MS Word
         """
         self.tablelist = tablelist
         self.generated_structure = ''
-        self.gen_table_structures_for_adoc()
+        self.gen_table_structures_for_adoc(for_word)
 
     def get_table_structures(self):
         return self.generated_structure
 
-    def gen_table_structures_for_adoc(self):
+    def gen_table_structures_for_adoc(self, for_word):
         """
         A táblák struktúráját az asciidoctor számára könnyen feldolgozható formába alakítja.
         :param db: adatbázis objektum
@@ -31,7 +31,7 @@ class Structure_generator:
         """
         out = []
         for table in self.tablelist:
-            table_structure = table.get_structure()
+            table_structure = table.get_structure(for_word)
             table_structure_formatted = self._add_header_and_separators(table_structure)
             out.append(f'== {table.name}\n')
             out.append('|===\n')
