@@ -1,5 +1,3 @@
-= gentableadoc
-
 == Leírás
 
 [source,python]

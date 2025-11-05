@@ -1,7 +1,9 @@
+""" A modul egyedi azonosítókat generál."""
+
 import random
 
 def generateid() -> str:
-    """ Generate a random 20-digit integer for more uniqueness """
+    """ Véletlenszerű 20 jegyű azonosítót generál nagyobb egyediséget biztosítva """
     rndint = random.randint(10**19, 10**20 - 1)
     szam = rndint
     szam_konv = ''
@@ -14,6 +16,3 @@ def generateid() -> str:
         szam = szam // 35
     return szam_konv
 
-if __name__ == '__main__':
-    for i in range(1,10):
-        print(generateid())

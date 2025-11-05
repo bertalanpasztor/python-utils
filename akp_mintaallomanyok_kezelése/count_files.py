@@ -1,3 +1,6 @@
+"""
+Számolja és kiírja az adott könyvtár közvetlen alkönyvtáraiban található fájlok számát (rekurzívan).
+"""
 import os
 
 def count_files_in_dir(path: str) -> int:
@@ -13,6 +16,8 @@ def list_subdir_file_counts(base_path: str):
         if entry.is_dir():
             count = count_files_in_dir(entry.path)
             print(f"{entry.name}: {count} fájl")
+
+
 if __name__ == "__main__":
     path = 'c:/GIT/AKP/data-file-notifier-python/akpdir/KEREKPAR'
     if not os.path.exists(path):

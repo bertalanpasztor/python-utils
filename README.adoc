@@ -1,7 +1,14 @@
-= Projekt Dokumentáció
+= Projekt áttekintés
 
--- TODO: Antora formátumra hozni
--- TODO: megcsinálni a gentable_from_document programot
+== STATION_X_DEVICE_X_DEVICE_UNIT
+Ez a program beolvassa egy Google Sheet táblázat adatait, és betölti egy PostgreSQL adatbázis táblájába.
 
+== checksum_corrector
+A program egy hibalog fájl alapján SQL UPDATE parancsokat generál az adatbázis changelog rekordok ellenőrzőösszegének javításához.
+
+== id_generator
+A program egyedi azonosítókat generál adatbázis rekordokhoz vagy más alkalmazásokhoz (x__id).
+
+== gentableadoc
 include::gentableadoc/README.adoc[leveloffset=+1]
 
