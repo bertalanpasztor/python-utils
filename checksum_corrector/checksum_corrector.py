@@ -1,21 +1,28 @@
 """
-Generates SQL update commands to correct checksums in a database changelog based on an error log file.
-PLace the log into 'error_log.txt' and run the script to produce 'update_commands.sql'.
+SQL UPDATE parancsokat generál, hogy javítsa az ellenőrzőösszegeket egy adatbázis changelog-ban egy hibalog fájl alapján.
+Helyezd a log részletét az 'error_log.txt' fájlba
+és futtasd a programot, hogy létrejöjjön az 'update_commands.sql' fájl,
+amely tartalmazza a javító SQL parancsokat.
 """
 
 def read_error_log_file(filename: str) -> list[str]:
+    """
+    Hibalog fájlt olvas be és visszaadja a releváns sorokat egy listában
+    :paraméter filename: Hibalog fájl neve.
+    :Viszaadott érték: A hibalog releváns sorainak listája.
+    """
     with open(filename, 'r', encoding='utf-8') as f:
         # read lines containing"but is now:"
         lines = [line.strip() for line in f.readlines() if 'but is now:' in line]
     return lines
 
 
-def gen_update_commands_to_file(log: object, param: object) -> None:
-    """Generates SQL update commands to correct checksums in a database changelog.
-    :param log: List of error log lines.
-    :param param: Output filename for the SQL commands.
+def gen_update_commands_to_file(log: object, output_file: object) -> None:
+    """SQL UODATE parancsokat generál, hogy javítsa az ellenőrzőösszegeket egy adatbázis changelog-ban.
+    :paraméter log: Hibalog sorok listája.
+    :paraméter output_file: Az SQL parancsokat tartalmazó kimeneti fájl neve.
     """
-    with open(param, 'w', encoding='utf-8') as f:
+    with open(output_file, 'w', encoding='utf-8') as f:
         for line in log:
             id_parts = line.split('::')
             author = id_parts[2].split(' was:')[0]
